@@ -1,0 +1,182 @@
+[package]
+name = "glyph-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[features]
+default = []
+snark = ["glyph/snark"]
+stark-babybear = ["glyph/stark-babybear"]
+stark-goldilocks = ["glyph/stark-goldilocks"]
+stark-m31 = ["glyph/stark-m31"]
+ivc = ["glyph/ivc"]
+ivc-supernova = ["glyph/ivc-supernova", "glyph/ivc"]
+stwo-prover = ["glyph/stwo-prover"]
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.glyph]
+path = "../../../.."
+default-features = false
+features = ["adapter-core"]
+
+[patch.crates-io]
+size-of = { path = "../../../../vendor/feldera-size-of" }
+msgpacker = { path = "../../../../vendor/msgpacker" }
+binius_compute = { path = "../../../../vendor/binius/crates/compute" }
+binius_core = { path = "../../../../vendor/binius/crates/core" }
+binius_fast_compute = { path = "../../../../vendor/binius/crates/fast_compute" }
+binius_field = { path = "../../../../vendor/binius/crates/field" }
+binius_hal = { path = "../../../../vendor/binius/crates/hal" }
+binius_hash = { path = "../../../../vendor/binius/crates/hash" }
+binius_macros = { path = "../../../../vendor/binius/crates/macros" }
+binius_math = { path = "../../../../vendor/binius/crates/math" }
+binius_maybe_rayon = { path = "../../../../vendor/binius/crates/maybe_rayon" }
+binius_ntt = { path = "../../../../vendor/binius/crates/ntt" }
+binius_utils = { path = "../../../../vendor/binius/crates/utils" }
+
+[patch."https://github.com/IrreducibleOSS/binius"]
+binius_field = { path = "../../../../vendor/binius/crates/field" }
+
+[[bin]]
+name = "decode_stark_receipt"
+path = "fuzz_targets/decode_stark_receipt.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "decode_plonky2_receipt"
+path = "fuzz_targets/decode_plonky2_receipt.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "verify_adapter_proof"
+path = "fuzz_targets/verify_adapter_proof.rs"
+test = false
+doc = false
+
+ [[bin]]
+ name = "decode_stark_vk"
+ path = "fuzz_targets/decode_stark_vk.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_adapter_ir_deep"
+ path = "fuzz_targets/decode_adapter_ir_deep.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_adapter_bytes"
+ path = "fuzz_targets/decode_adapter_bytes.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "verify_packed_calldata"
+ path = "fuzz_targets/verify_packed_calldata.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_stark_ir"
+ path = "fuzz_targets/decode_stark_ir.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_winterfell_program"
+ path = "fuzz_targets/decode_winterfell_program.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_circle_stark_program"
+ path = "fuzz_targets/decode_circle_stark_program.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_circle_stark_proof"
+ path = "fuzz_targets/decode_circle_stark_proof.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_standard_stark_program"
+ path = "fuzz_targets/decode_standard_stark_program.rs"
+ test = false
+ doc = false
+
+ [[bin]]
+ name = "decode_standard_stark_proof"
+ path = "fuzz_targets/decode_standard_stark_proof.rs"
+ test = false
+ doc = false
+
+[[bin]]
+name = "decode_ipa_receipt"
+path = "fuzz_targets/decode_ipa_receipt.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "diff_adapter_ir_roundtrip"
+path = "fuzz_targets/diff_adapter_ir_roundtrip.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "transcript_challenges"
+path = "fuzz_targets/transcript_challenges.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "validate_state_transition_batch"
+path = "fuzz_targets/validate_state_transition_batch.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "bn254_op_traces"
+path = "fuzz_targets/bn254_op_traces.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "decode_r1cs_receipt"
+path = "fuzz_targets/decode_r1cs_receipt.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "decode_supernova_external_proof"
+path = "fuzz_targets/decode_supernova_external_proof.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "decode_stwo_profile"
+path = "fuzz_targets/decode_stwo_profile.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "decode_stwo_program"
+path = "fuzz_targets/decode_stwo_program.rs"
+test = false
+doc = false
+
+[[bin]]
+name = "synthesize_stwo_proof"
+path = "fuzz_targets/synthesize_stwo_proof.rs"
+test = false
+doc = false

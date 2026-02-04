@@ -1,0 +1,7 @@
+{
+  "cwd": "/Users/christopher/CODE/glyph-zk",
+  "exe": "/Users/christopher/CODE/glyph-zk/target/release/gen_glyph_gkr_proof",
+  "perf_config_path": "scripts/out/perf/perf_config.json",
+  "pid": 9433,
+  "timestamp": "SystemTime { tv_sec: 1770028329, tv_nsec: 87075000 }"
+}

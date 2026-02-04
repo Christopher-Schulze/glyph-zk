@@ -1,0 +1,26 @@
+{
+  "bench": "bench_glyph_sepolia_stmt",
+  "cases": [
+    {
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3488,
+      "case": "artifact_full",
+      "estimate_gas": "0x7576",
+      "execution_gas": 5582
+    },
+    {
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3488,
+      "case": "artifact_truncated",
+      "estimate_gas": "0x7576",
+      "execution_gas": 5582
+    }
+  ],
+  "chain_id": "11155111",
+  "contract": "0x25137B56046974F1Dda9D2Da9e868A8f5E23E5E7",
+  "git_commit": "unknown",
+  "rpc_host": "https://ethereum-sepolia-rpc.publicnode.com",
+  "timestamp": "2026-02-02T10:32:09Z"
+}

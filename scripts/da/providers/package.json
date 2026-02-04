@@ -1,0 +1,8 @@
+{
+  "name": "glyph-da-providers",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@ardrive/turbo-sdk": "^1.40.0"
+  }
+}

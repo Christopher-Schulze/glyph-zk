@@ -1,0 +1,27 @@
+=== bench_context ===
+bench_name=glyph_sepolia_stmt
+out_file=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_sepolia_stmt_20260202T102438Z.json
+out_dir=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks
+run_id=20260202T102438Z
+rpc_host=https://ethereum-sepolia-rpc.publicnode.com
+chain_id=11155111
+deployer=0xc41E9Db7bbAEBF392A8d1cd05E0D49D90067D0f2
+rounds=5
+out_json=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_sepolia_stmt_20260202T102438Z.json
+out_log=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_sepolia_stmt_20260202T102438Z.log
+
+Checking balance...
+balance_wei=44490808947247227
+
+Building gen_glyph_gkr_proof...
+    Finished `release` profile [optimized] target(s) in 1.11s
+
+Using existing deployment: 0x25137B56046974F1Dda9D2Da9e868A8f5E23E5E7
+
+case                          bytes estimate_gas
+-------------------------- -------- ------------
+artifact_full                   224       0x7576
+artifact_truncated              224       0x7576
+
+json_out=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_sepolia_stmt_20260202T102438Z.json
+Done.

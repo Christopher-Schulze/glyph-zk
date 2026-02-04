@@ -1,0 +1,35 @@
+=== bench_context ===
+bench_name=glyph_sepolia_artifact
+out_file=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_hoodi_artifact_20260202T110500Z.json
+out_dir=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks
+run_id=20260202T110500Z
+rpc_host=https://ethereum-hoodi-rpc.publicnode.com
+chain_id=560048
+deployer=0xc41E9Db7bbAEBF392A8d1cd05E0D49D90067D0f2
+rounds=5
+commitment=0x1111111111111111111111111111111111111111111111111111111111111111
+point=0x2222222222222222222222222222222222222222222222222222222222222222
+claim=0x000000000000000000000000000000000000000000000000000000000000007b
+out_json=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_hoodi_artifact_20260202T110500Z.json
+out_log=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_hoodi_artifact_20260202T110500Z.log
+
+Checking balance...
+balance_wei=1984479373863952598
+
+Building gen_glyph_gkr_proof...
+    Finished `release` profile [optimized] target(s) in 1.04s
+
+Building glyph_raw_tx...
+    Finished `release` profile [optimized] target(s) in 0.25s
+Using existing deployment: 0xfAd89a58ED6c96135B5AF65ab0E1F42833f097a7
+
+raw_tx_gas_price=1040117255
+raw_tx_nonce_base=64
+
+case                          bytes estimate_gas
+-------------------------- -------- ------------
+artifact_full                   224       0x7467
+artifact_truncated              224       0x7467
+
+json_out=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_glyph_hoodi_artifact_20260202T110500Z.json
+Done.

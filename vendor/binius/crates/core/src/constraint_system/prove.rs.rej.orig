@@ -1,0 +1,4 @@
+@@ -12,3 +12,2 @@
+ use binius_compute::{ComputeData, ComputeLayer, alloc::ComputeAllocator, cpu::CpuMemory};
+ use binius_fast_compute::arith_circuit::ArithCircuitPoly;
+-use binius_fast_compute::arith_circuit::ArithCircuitPoly;

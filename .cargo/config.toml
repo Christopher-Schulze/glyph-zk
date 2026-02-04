@@ -1,0 +1,21 @@
+[build]
+rustc-wrapper = ""
+target-dir = "target"
+rustflags = [
+  "-A", "unsupported_calling_conventions",
+  "-A", "mismatched_lifetime_syntaxes",
+  "-A", "unused",
+  "-A", "dead_code",
+]
+
+[env]
+RUST_TEST_THREADS = "3"
+
+[registries.crates-io]
+protocol = "sparse"
+
+[http]
+timeout = 600
+
+[net]
+retry = 10

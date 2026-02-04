@@ -1,0 +1,18 @@
+{
+  "bench": "bench_groth16_hoodi",
+  "case": {
+    "base_tx_gas": 21000,
+    "calldata_bytes": 548,
+    "calldata_gas": 5396,
+    "estimate_gas": "0x421ed",
+    "execution_gas": 244433,
+    "name": "groth16_verify",
+    "tx_gas": "267538",
+    "tx_hash": "0x1f2f5f5ebccd97df17219a45e998a6176494e0ed4477c3bbb0a2f5e178beb58f"
+  },
+  "chain_id": "560048",
+  "contract": "0x656013dA6ea8e060c60Dc55866cF518e34d58910",
+  "git_commit": "unknown",
+  "rpc_host": "https://ethereum-hoodi-rpc.publicnode.com",
+  "timestamp": "2026-02-02T10:26:29Z"
+}

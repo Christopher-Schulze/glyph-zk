@@ -1,0 +1,13 @@
+[package]
+name = "sp1_fixture_gen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hex = "0.4"
+sp1-build = "5.2.4"
+sp1-core-executor = "5.2.4"
+sp1-core-machine = "5.2.4"
+sp1-prover = { version = "5.2.4", features = ["native-gnark"] }
+sp1-sdk = { version = "5.2.4", features = ["network"] }
+sp1-stark = "5.2.4"

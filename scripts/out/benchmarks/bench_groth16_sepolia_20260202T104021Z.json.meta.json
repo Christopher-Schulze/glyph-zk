@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-02-02T10:41:37Z",
+  "git_commit": "unknown",
+  "script": "bench_groth16_sepolia.sh",
+  "json_out": "bench_groth16_sepolia_20260202T104021Z.json"
+}

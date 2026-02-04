@@ -1,0 +1,11 @@
+[profile.default]
+src = "."
+out = "../../out/foundry"
+cache_path = "../../out/foundry-cache"
+libs = ["lib", "../.."]
+optimizer = true
+optimizer_runs = 100000
+via_ir = true
+evm_version = "osaka"
+test = "**/*Test.t.sol"
+ignored_error_codes = [2424, 4591]

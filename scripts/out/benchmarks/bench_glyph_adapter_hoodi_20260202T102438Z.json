@@ -1,0 +1,58 @@
+{
+  "bench": "bench_glyph_adapter_hoodi",
+  "cases": [
+    {
+      "adapter": "SNARK_GROTH16_BN254",
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3488,
+      "estimate_gas": "0x7576",
+      "execution_gas": 5582
+    },
+    {
+      "adapter": "SNARK_KZG_BN254",
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3488,
+      "estimate_gas": "0x7576",
+      "execution_gas": 5582
+    },
+    {
+      "adapter": "IVC",
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3476,
+      "estimate_gas": "0x7558",
+      "execution_gas": 5564
+    },
+    {
+      "adapter": "SNARK_IPA",
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3584,
+      "estimate_gas": "0x7666",
+      "execution_gas": 5726
+    },
+    {
+      "adapter": "STARK",
+      "base_tx_gas": 21000,
+      "calldata_bytes": 160,
+      "calldata_gas": 2560,
+      "estimate_gas": "0x6c61",
+      "execution_gas": 4185
+    },
+    {
+      "adapter": "HASH",
+      "base_tx_gas": 21000,
+      "calldata_bytes": 224,
+      "calldata_gas": 3476,
+      "estimate_gas": "0x7558",
+      "execution_gas": 5564
+    }
+  ],
+  "chain_id": "560048",
+  "contract": "0xfAd89a58ED6c96135B5AF65ab0E1F42833f097a7",
+  "git_commit": "unknown",
+  "rpc_host": "https://ethereum-hoodi-rpc.publicnode.com",
+  "timestamp": "2026-02-02T10:33:04Z"
+}

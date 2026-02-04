@@ -1,0 +1,773 @@
+{
+  "source": "env",
+  "timestamp": "SystemTime { tv_sec: 1770028329, tv_nsec: 87075000 }",
+  "entries": [
+    {
+      "name": "GLYPH_PCS_MASK_ROWS",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_SUMCHECK_PAGED",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_RING_SWITCH_PAR_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_SECURITY_BITS",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_LOG_INV_RATE",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_HOST_MEM",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_DEV_MEM",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_FOLD_ARITY",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_TRACE",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_CPU_ONLY",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PCS_BASEFOLD_PAR_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA",
+      "kind": "bool",
+      "present": true,
+      "raw": "0",
+      "value": {
+        "bool": false
+      },
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_DEBUG",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_PTX",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_MIN_ELEMS",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_BN254_MIN_ELEMS",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_PINNED_HOST",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_STARK_MIN_SECURITY",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CIRCLE_STARK_PAR_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_STANDARD_STARK_PAR_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_STWO_PAR_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_SIMD",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_MUL_MONT",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_PAR_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_WITNESS_BATCH",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_WITNESS_BATCH_MIN",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_WITNESS_WATCHERS_MAX_EDGES",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_WITNESS_WATCHER_FANOUT",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_KECCAK_X4",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_KZG_BN254_TRACE_G2S_PRECOMP",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_KZG_BN254_TRACE_STATS",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_GROTH16_BN254_TRACE_STATS",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_GROTH16_BN254_TRACE_IC_PRECOMP",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_FIXED_BASE_PRECOMP",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_KZG_JOINT_MSM",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_IC_PRECOMP_AUTO",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_G2_PRECOMP_AUTO",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_TRACE_VALIDATE_BATCH",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_SCALAR_WINDOW",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_SCALAR_MUL",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_WNAF_SLOW",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_MSM_GLV",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_MSM_WINDOW",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_MSM_SMALL_THRESHOLD",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_MSM_PRECOMP_THRESHOLD",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_MSM_SHAMIR",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PROFILE_VERSION",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ACCEL_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_BN254_PROVER_CORE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_GROTH16_BN254_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_KZG_BN254_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_IVC_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_STARK_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_HASH_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_SP1_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PLONK_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ZK_KPI_SEED",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 0,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ZK_KPI_REPEAT",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ZK_KPI_CHAINID",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ZK_KPI_CONTRACT",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_KPI_N",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_KPI_ROWS",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_KPI_COLS",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_KPI_HASHES",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_CUDA_KPI_SEED",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 0,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ADAPTER_KPI",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ADAPTER_KPI_GROTH16_BN254_IC_WINDOW",
+      "kind": "u64",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": 1,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ADAPTER_KPI_GROTH16_BN254_PRECOMP",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ADAPTER_KPI_KZG_BN254_PRECOMP",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_ADAPTER_KPI_STARK_F64",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_TEST_PROFILE",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_TEST_FEATURES",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_SKIP_FUZZ",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_FULL_TESTS",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_FUZZ_STARK",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_FUZZ_CAIRO",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_F64",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_CIRCLE_LARGE",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_PLONKY2",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_PLONKY3",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_MIDEN",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_CAIRO",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_E2E_INCLUDE_SP1",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PERF_CONFIG_OUT",
+      "kind": "string",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    },
+    {
+      "name": "GLYPH_PERF_CONFIG_DISABLE",
+      "kind": "bool",
+      "present": false,
+      "raw": null,
+      "value": null,
+      "min": null,
+      "max": null
+    }
+  ]
+}

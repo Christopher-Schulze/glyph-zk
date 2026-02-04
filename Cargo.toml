@@ -1,0 +1,571 @@
+
+[package]
+name = "glyph"
+version = "1.0.295"
+edition = "2021"
+autobins = false
+
+[features]
+default = [
+    "adapter-core",
+    "snark",
+    "ivc",
+    "hash",
+    "stark-babybear",
+    "stark-goldilocks",
+    "stark-m31",
+    "binius",
+    "stwo-prover",
+]
+# Core build without heavy optional dependencies
+adapter-core = []
+snark = [
+    "dep:sp1-verifier",
+    "dep:gnark-bn254-verifier",
+    "dep:dusk-plonk",
+    "dep:dusk-bytes",
+    "dep:dusk-bls12_381",
+    "dep:halo2_proofs",
+    "dep:halo2_middleware",
+]
+ivc = ["binius"]
+ivc-supernova = ["dep:arecibo"]
+hash = []
+stark-babybear = [
+    "dep:winterfell",
+    "dep:winter-crypto",
+    "dep:winter-math",
+    "dep:winter-utils",
+    "dep:miden-verifier",
+    "dep:miden-processor",
+    "dep:miden-air",
+    "dep:miden-assembly",
+    "dep:miden-prover",
+    "dep:plonky2",
+    "dep:plonky2_field",
+    "dep:p3-uni-stark",
+    "dep:p3-air",
+    "dep:p3-field",
+    "dep:p3-fri",
+    "dep:p3-challenger",
+    "dep:p3-commit",
+    "dep:p3-merkle-tree",
+    "dep:p3-symmetric",
+    "dep:p3-circle",
+    "dep:p3-poseidon2",
+    "dep:p3-poseidon",
+    "dep:p3-blake3",
+    "dep:p3-keccak",
+    "dep:p3-matrix",
+    "dep:p3-dft",
+    "dep:p3-mds",
+    "dep:p3-rescue",
+    "dep:p3-mersenne-31",
+    "dep:p3-baby-bear",
+    "dep:p3-koala-bear",
+    "dep:p3-goldilocks",
+    "dep:swiftness",
+    "dep:swiftness_air",
+    "dep:swiftness_stark",
+    "dep:swiftness_proof_parser",
+    "dep:stwo",
+]
+stark-goldilocks = [
+    "dep:winterfell",
+    "dep:winter-crypto",
+    "dep:winter-math",
+    "dep:winter-utils",
+    "dep:miden-verifier",
+    "dep:miden-processor",
+    "dep:miden-air",
+    "dep:miden-assembly",
+    "dep:miden-prover",
+    "dep:plonky2",
+    "dep:plonky2_field",
+    "dep:p3-uni-stark",
+    "dep:p3-air",
+    "dep:p3-field",
+    "dep:p3-fri",
+    "dep:p3-challenger",
+    "dep:p3-commit",
+    "dep:p3-merkle-tree",
+    "dep:p3-symmetric",
+    "dep:p3-circle",
+    "dep:p3-poseidon2",
+    "dep:p3-poseidon",
+    "dep:p3-blake3",
+    "dep:p3-keccak",
+    "dep:p3-matrix",
+    "dep:p3-dft",
+    "dep:p3-mds",
+    "dep:p3-rescue",
+    "dep:p3-mersenne-31",
+    "dep:p3-baby-bear",
+    "dep:p3-koala-bear",
+    "dep:p3-goldilocks",
+    "dep:swiftness",
+    "dep:swiftness_air",
+    "dep:swiftness_stark",
+    "dep:swiftness_proof_parser",
+    "dep:stwo",
+]
+stark-m31 = [
+    "dep:winterfell",
+    "dep:winter-crypto",
+    "dep:winter-math",
+    "dep:winter-utils",
+    "dep:miden-verifier",
+    "dep:miden-processor",
+    "dep:miden-air",
+    "dep:miden-assembly",
+    "dep:miden-prover",
+    "dep:plonky2",
+    "dep:plonky2_field",
+    "dep:p3-uni-stark",
+    "dep:p3-air",
+    "dep:p3-field",
+    "dep:p3-fri",
+    "dep:p3-challenger",
+    "dep:p3-commit",
+    "dep:p3-merkle-tree",
+    "dep:p3-symmetric",
+    "dep:p3-circle",
+    "dep:p3-poseidon2",
+    "dep:p3-poseidon",
+    "dep:p3-blake3",
+    "dep:p3-keccak",
+    "dep:p3-matrix",
+    "dep:p3-dft",
+    "dep:p3-mds",
+    "dep:p3-rescue",
+    "dep:p3-mersenne-31",
+    "dep:p3-baby-bear",
+    "dep:p3-koala-bear",
+    "dep:p3-goldilocks",
+    "dep:swiftness",
+    "dep:swiftness_air",
+    "dep:swiftness_stark",
+    "dep:swiftness_proof_parser",
+    "dep:stwo",
+]
+binius = []
+cuda = ["dep:cudarc"]
+stwo-prover = ["stark-m31", "stwo/prover"]
+# Full feature build
+full = [
+    "adapter-core",
+    "snark",
+    "ivc",
+    "hash",
+    "stark-babybear",
+    "stark-goldilocks",
+    "stark-m31",
+    "binius",
+    "cuda",
+    "stwo-prover",
+]
+dev-tools = []
+
+[dependencies]
+num-bigint = { version = "0.4.4", features = ["rand"] }
+num-traits = "0.2.17"
+rand = "0.8.5"
+rand09 = { package = "rand", version = "0.9" }
+lazy_static = "1.4.0"
+sha2 = "0.10.8"
+blake2 = "0.10"
+blake3 = "1.5.1"
+tiny-keccak = { version = "2.0.2", features = ["keccak"] }
+starknet-crypto = "0.7.1"
+num-integer = "0.1.46"
+libc = "0.2"
+bytes = "1.11.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+itertools = "0.12"
+bincode = { version = "1.3" }
+ff = "0.13"
+time = { version = "0.3", features = ["formatting"] }
+halo2_proofs = { git = "https://github.com/privacy-scaling-explorations/halo2", rev = "198e9ae30d322cd0ad003b6955f91ec095b1490d", optional = true }
+halo2_middleware = { git = "https://github.com/privacy-scaling-explorations/halo2", rev = "198e9ae30d322cd0ad003b6955f91ec095b1490d", optional = true }
+plonky2 = { version = "0.2", optional = true }
+plonky2_field = { version = "0.2", optional = true }
+
+# BN254 Curve for Ethereum-compatible IPA
+ark-bn254 = "0.4"
+ark-bls12-381 = "0.4"
+ark-ec = "0.4"
+ark-ff = "0.4"
+ark-serialize = "0.4"
+ark-std = "0.4"
+ark-groth16 = "0.4"
+nova-snark = "0.43.0"
+arecibo = { version = "0.1.1", optional = true }
+bellpepper-core = "0.4.0"
+sp1-verifier = { version = "5.2.4", optional = true }
+swiftness = { version = "1.0.0", optional = true, default-features = false, features = [
+  "starknet_with_keccak",
+  "keccak_160_lsb",
+  "stone6",
+] }
+swiftness_air = { version = "1.0.0", optional = true, default-features = false, features = [
+  "starknet_with_keccak",
+  "keccak_160_lsb",
+  "stone6",
+] }
+swiftness_stark = { version = "1.0.0", optional = true, default-features = false, features = [
+  "starknet_with_keccak",
+  "keccak_160_lsb",
+  "stone6",
+] }
+swiftness_proof_parser = { version = "1.0.0", optional = true }
+miden-verifier = { version = "0.20.1", optional = true }
+miden-processor = { version = "0.20.2", optional = true }
+miden-air = { version = "0.20.2", optional = true }
+miden-assembly = { version = "0.20.2", optional = true }
+miden-prover = { version = "0.20.2", optional = true }
+gnark-bn254-verifier = { version = "1.0.2", optional = true }
+dusk-plonk = { version = "0.21.0", default-features = false, features = ["alloc"], optional = true }
+dusk-bytes = { version = "0.1", optional = true }
+dusk-bls12_381 = { version = "0.14", default-features = false, features = ["groups", "pairings"], optional = true }
+p3-uni-stark = { version = "0.4.2", optional = true }
+p3-air = { version = "0.4.2", optional = true }
+p3-field = { version = "0.4.2", optional = true }
+p3-fri = { version = "0.4.2", optional = true }
+p3-challenger = { version = "0.4.2", optional = true }
+p3-commit = { version = "0.4.2", optional = true }
+p3-merkle-tree = { version = "0.4.2", optional = true }
+p3-symmetric = { version = "0.4.2", optional = true }
+p3-circle = { version = "0.4.2", optional = true }
+p3-poseidon2 = { version = "0.4.2", optional = true }
+p3-poseidon = { version = "0.4.2", optional = true }
+p3-blake3 = { version = "0.4.2", optional = true }
+p3-keccak = { version = "0.4.2", optional = true }
+p3-matrix = { version = "0.4.2", optional = true }
+p3-dft = { version = "0.4.2", optional = true }
+p3-mds = { version = "0.4.2", optional = true }
+p3-rescue = { version = "0.4.2", optional = true }
+p3-mersenne-31 = { version = "0.4.2", optional = true }
+p3-baby-bear = { version = "0.4.2", optional = true }
+p3-koala-bear = { version = "0.4.2", optional = true }
+p3-goldilocks = { version = "0.4.2", optional = true }
+
+# Utilities
+hex = "0.4"
+rlp = "0.5.2"
+secp256k1 = { version = "0.29", features = ["recovery"] }
+rayon = "1.10"
+winterfell = { version = "0.13.1", optional = true }
+winter-crypto = { version = "0.13.1", optional = true }
+winter-math = { version = "0.13.1", optional = true }
+winter-utils = { version = "0.13.1", optional = true }
+cudarc = { version = "0.18.2", optional = true, default-features = false, features = ["driver", "nvrtc", "dynamic-loading", "cuda-13010"] }
+
+# Binius field backend (git-pinned).
+binius_field = { git = "https://github.com/IrreducibleOSS/binius", rev = "47675e19c86c0fb676f75437073a77af8e337938", default-features = false }
+binius_core = { path = "vendor/binius/crates/core", default-features = false }
+binius_fast_compute = { path = "vendor/binius/crates/fast_compute", default-features = false }
+binius_compute = { path = "vendor/binius/crates/compute", default-features = false }
+binius_hash = { path = "vendor/binius/crates/hash", default-features = false }
+binius_math = { path = "vendor/binius/crates/math", default-features = false }
+binius_ntt = { path = "vendor/binius/crates/ntt", default-features = false }
+binius_utils = { path = "vendor/binius/crates/utils", default-features = false }
+stwo = { git = "https://github.com/starkware-libs/stwo", rev = "0b8128669e91eb032b6c9f62766d6a49da4f2e64", optional = true }
+
+[dev-dependencies]
+ark-relations = "0.4"
+ark-snark = "0.4"
+proptest = "1.0"
+halo2_frontend = { git = "https://github.com/privacy-scaling-explorations/halo2", rev = "198e9ae30d322cd0ad003b6955f91ec095b1490d" }
+binius_m3 = { path = "vendor/binius/crates/m3", default-features = false, features = ["test_utils"] }
+binius_hal = { path = "vendor/binius/crates/hal", default-features = false }
+
+[[test]]
+name = "adapter_error_semantics"
+path = "scripts/tests/rust/adapter_error_semantics.rs"
+
+[[test]]
+name = "adapter_ir_property_tests"
+path = "scripts/tests/rust/adapter_ir_property_tests.rs"
+
+[[test]]
+name = "cli_registry_consistency_tests"
+path = "scripts/tests/rust/cli_registry_consistency_tests.rs"
+
+[[test]]
+name = "bn254_emulation_property_tests"
+path = "scripts/tests/rust/bn254_emulation_property_tests.rs"
+
+[[test]]
+name = "chaos_stark_decode_tests"
+path = "scripts/tests/rust/chaos_stark_decode_tests.rs"
+
+[[test]]
+name = "chaos_truncated_inputs"
+path = "scripts/tests/rust/chaos_truncated_inputs.rs"
+
+[[test]]
+name = "crypto_parameter_integrity"
+path = "scripts/tests/rust/crypto_parameter_integrity.rs"
+
+[[test]]
+name = "da_envelope_tests"
+path = "scripts/tests/rust/da_envelope_tests.rs"
+
+[[test]]
+name = "da_integration_tests"
+path = "scripts/tests/rust/da_integration_tests.rs"
+
+[[test]]
+name = "differential_receipt_verification"
+path = "scripts/tests/rust/differential_receipt_verification.rs"
+
+[[test]]
+name = "ir_compiler_boundary_tests"
+path = "scripts/tests/rust/ir_compiler_boundary_tests.rs"
+
+[[test]]
+name = "prop_test_suite"
+path = "scripts/tests/rust/prop_test_suite.rs"
+
+[[test]]
+name = "risc_zero_fixture_checks"
+path = "scripts/tests/rust/risc_zero_fixture_checks.rs"
+
+[[test]]
+name = "transcript_property_tests"
+path = "scripts/tests/rust/transcript_property_tests.rs"
+
+[[test]]
+name = "ucir_compiler_equivalence"
+path = "scripts/tests/rust/ucir_compiler_equivalence.rs"
+
+[[test]]
+name = "ivc_supernova_tests"
+path = "scripts/tests/rust/ivc_supernova_tests.rs"
+
+[[test]]
+name = "stwo_prover_tests"
+path = "scripts/tests/rust/stwo_prover_tests.rs"
+
+
+[[bin]]
+name = "gen_stwo_external_fixture"
+path = "src/bin/gen_stwo_external_fixture.rs"
+required-features = ["stwo-prover"]
+
+[[bin]]
+name = "glyph_import_risc_zero_receipt"
+path = "src/bin/glyph_import_risc_zero_receipt.rs"
+required-features = ["stark-babybear"]
+
+[[bin]]
+name = "gen_risc_zero_bundle_fixture"
+path = "src/bin/gen_risc_zero_bundle_fixture.rs"
+required-features = ["stark-babybear"]
+
+[[bin]]
+name = "stwo_to_bundle"
+path = "scripts/tools/converters/stwo_to_bundle.rs"
+required-features = ["stwo-prover"]
+
+[[bin]]
+name = "glyph_import_miden_receipt"
+path = "src/bin/glyph_import_miden_receipt.rs"
+required-features = ["stark-goldilocks"]
+
+[[bin]]
+name = "glyph_import_cairo_receipt"
+path = "src/bin/glyph_import_cairo_receipt.rs"
+required-features = ["stark-m31"]
+
+[[bin]]
+name = "glyph_import_plonky3_receipt"
+path = "src/bin/glyph_import_plonky3_receipt.rs"
+required-features = ["stark-babybear"]
+
+[[bin]]
+name = "glyph_import_plonk_receipt"
+path = "src/bin/glyph_import_plonk_receipt.rs"
+required-features = ["snark"]
+
+[[bin]]
+name = "glyph_import_halo2_receipt"
+path = "src/bin/glyph_import_halo2_receipt.rs"
+required-features = ["snark"]
+
+[[bin]]
+name = "glyph_prover"
+path = "src/bin/glyph_prover.rs"
+required-features = ["snark"]
+
+[[bin]]
+name = "glyph_da"
+path = "src/bin/glyph_da.rs"
+
+[[bin]]
+name = "glyph_raw_tx"
+path = "src/bin/glyph_raw_tx.rs"
+
+[[bin]]
+name = "glyph_adapt_batch"
+path = "src/bin/glyph_adapt_batch.rs"
+
+[[bin]]
+name = "glyph_state_diff"
+path = "src/bin/glyph_state_diff.rs"
+
+[[bin]]
+name = "glyph_state_diff_prove"
+path = "src/bin/glyph_state_diff_prove.rs"
+
+[[bin]]
+name = "glyph_state_transition_prove"
+path = "src/bin/glyph_state_transition_prove.rs"
+
+[[bin]]
+name = "glyph_state_transition_execute"
+path = "src/bin/glyph_state_transition_execute.rs"
+
+[[bin]]
+name = "glyph_l2_statement"
+path = "src/bin/glyph_l2_statement.rs"
+
+[[bin]]
+name = "glyph_emit_cuda_kernels"
+path = "src/bin/glyph_emit_cuda_kernels.rs"
+required-features = ["cuda"]
+
+[[bin]]
+name = "glyph_import_stwo_receipt"
+path = "src/bin/glyph_import_stwo_receipt.rs"
+required-features = ["stark-m31"]
+
+[[bin]]
+name = "glyph_import_sp1_receipt"
+path = "src/bin/glyph_import_sp1_receipt.rs"
+required-features = ["snark"]
+
+[[bin]]
+name = "glyph_import_circle_receipt"
+path = "src/bin/glyph_import_circle_receipt.rs"
+required-features = ["stark-babybear"]
+
+[[bin]]
+name = "gen_stark_fixture_f64"
+path = "src/bin/gen_stark_fixture_f64.rs"
+required-features = ["stark-goldilocks"]
+
+[[bin]]
+name = "gen_stark_fixture"
+path = "src/bin/gen_stark_fixture.rs"
+required-features = ["stark-goldilocks"]
+
+[[bin]]
+name = "gen_glyph_gkr_proof"
+path = "src/bin/gen_glyph_gkr_proof.rs"
+required-features = ["stark-goldilocks"]
+
+[[bin]]
+name = "gen_fast_sha3_fixture"
+path = "src/bin/gen_fast_sha3_fixture.rs"
+required-features = ["stark-goldilocks"]
+
+[[bin]]
+name = "gen_circle_stark_fixture"
+path = "src/bin/gen_circle_stark_fixture.rs"
+required-features = ["stark-babybear"]
+
+[[bin]]
+name = "bench_glyph_zk_kpi"
+path = "src/bin/bench_glyph_zk_kpi.rs"
+
+[[bin]]
+name = "bench_basefold_pcs"
+path = "src/bin/bench_basefold_pcs.rs"
+
+[[bin]]
+name = "bench_glyph_packed_gkr_layout"
+path = "src/bin/bench_glyph_packed_gkr_layout.rs"
+
+[[bin]]
+name = "bench_state_diff_merkle"
+path = "src/bin/bench_state_diff_merkle.rs"
+
+[[bin]]
+name = "bench_state_diff_compile_prove"
+path = "src/bin/bench_state_diff_compile_prove.rs"
+
+[[bin]]
+name = "bench_state_transition_vm"
+path = "src/bin/bench_state_transition_vm.rs"
+
+[[bin]]
+name = "bench_glyph_cuda_kpi"
+path = "src/bin/bench_glyph_cuda_kpi.rs"
+required-features = ["cuda"]
+
+[[bin]]
+name = "bench_glyph_adapter_zk_kpi"
+path = "src/bin/bench_glyph_adapter_zk_kpi.rs"
+required-features = ["snark", "ivc"]
+
+[[bin]]
+name = "bench_glyph_adapter_kpi"
+path = "src/bin/bench_glyph_adapter_kpi.rs"
+required-features = ["snark", "ivc"]
+
+[[bin]]
+name = "bench_bn254_trace_kpi"
+path = "src/bin/bench_bn254_trace_kpi.rs"
+
+[[bin]]
+name = "bench_bn254_mul_kpi"
+path = "src/bin/bench_bn254_mul_kpi.rs"
+
+[[bin]]
+name = "bench_bn254_msm_kpi"
+path = "src/bin/bench_bn254_msm_kpi.rs"
+
+[[bin]]
+name = "bench_bn254_g2_kpi"
+path = "src/bin/bench_bn254_g2_kpi.rs"
+
+[[bin]]
+name = "bench_bn254_batch_kpi"
+path = "src/bin/bench_bn254_batch_kpi.rs"
+
+[[bin]]
+name = "bench_ivc_fold_kpi"
+path = "src/bin/bench_ivc_fold_kpi.rs"
+required-features = ["ivc"]
+
+[[bin]]
+name = "stark_do_work_kpis"
+path = "src/bin/stark_do_work_kpis.rs"
+required-features = ["stark-goldilocks"]
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+[profile.test]
+opt-level = 3
+incremental = true
+
+[profile.release-fast]
+inherits = "release"
+lto = false
+codegen-units = 16
+incremental = true
+
+[patch."https://github.com/IrreducibleOSS/binius"]
+binius_field = { path = "vendor/binius/crates/field" }
+
+[patch.crates-io]
+size-of = { path = "vendor/feldera-size-of" }
+msgpacker = { path = "vendor/msgpacker" }
+stackalloc = { path = "vendor/stackalloc" }
+
+[patch."https://github.com/starkware-libs/stwo"]
+stwo = { path = "vendor/stwo/crates/stwo" }

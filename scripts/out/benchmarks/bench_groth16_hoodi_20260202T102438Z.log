@@ -1,0 +1,28 @@
+=== bench_context ===
+bench_name=groth16_hoodi
+out_file=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_hoodi_20260202T102438Z.json
+out_dir=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks
+run_id=20260202T102438Z
+rpc_host=https://ethereum-hoodi-rpc.publicnode.com
+chain_id=560048
+deployer=0xc41E9Db7bbAEBF392A8d1cd05E0D49D90067D0f2
+out_json=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_hoodi_20260202T102438Z.json
+out_log=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_hoodi_20260202T102438Z.log
+
+Checking balance...
+balance_wei=1986204040679039139
+
+Deploying Groth16Verifier...
+contract=0x656013dA6ea8e060c60Dc55866cF518e34d58910
+deploy_tx=0xf5a31dd009874573162d9694431aaf7f2400f8756e3c0b2a2b4e23df044e6992
+deploy_gas=705134
+
+case                    bytes estimate_gas
+-------------------- -------- ------------
+groth16_verify            548      0x421ed
+
+Sending on-chain transaction...
+tx_hash=0x1f2f5f5ebccd97df17219a45e998a6176494e0ed4477c3bbb0a2f5e178beb58f
+tx_gas=267538
+json_out=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_hoodi_20260202T102438Z.json
+Done.

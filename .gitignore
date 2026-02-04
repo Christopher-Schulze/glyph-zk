@@ -1,0 +1,61 @@
+# Build artifacts
+/target/
+
+# Project config (local)
+/AGENTS.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*.ps1
+
+# Environment files with secrets
+.env
+.env.*
+.env.wallet
+/docs/wallet/
+!.env.*.example
+
+# Foundry
+/scripts/tests/foundry/cache/
+/scripts/tests/foundry/out/
+
+# Generated test files
+*.generated
+*.candidate
+
+# Local todo files
+/docs/todo.md
+/docs/todo/
+/docs/whitepaper/*
+!/docs/whitepaper/glyph-whitepaper.pdf
+!/docs/whitepaper/glyph-proof-appendix.pdf
+/docs/whitepaper/build/
+/docs/changelog.md
+/docs/context.md
+
+# Fuzzing workdir outputs
+/scripts/tests/fuzz/workspace/artifacts/
+/scripts/tests/fuzz/workspace/corpus/
+/scripts/tests/fuzz/workspace/target/
+
+# Vendored dependencies
+/scripts/benchmarks/groth16_compare/node_modules/
+/scripts/da/providers/node_modules/
+/scripts/benchmarks/groth16_compare/artifacts*/
+/scripts/benchmarks/groth16_compare/*.r1cs
+/scripts/benchmarks/groth16_compare/*.wasm
+/scripts/benchmarks/groth16_compare/*.sym
+/scripts/out/benchmarks/groth16_compare/
+/vendor/**/.git.bak/
+/vendor/**/.git.bak
+
+# Local Tools
+/scripts/tools/foundry/
+/scripts/tools/windows/
+/scripts/da/srs/
+!deployments/*.json
+!deployments/.gitkeep

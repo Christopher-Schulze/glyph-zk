@@ -1,0 +1,39 @@
+{
+  "schema_version": "bench_registry_v1",
+  "benchmarks": [
+    { "name": "bn254_batch_kpi", "script": "bench_bn254_batch_kpi.sh", "preset": "local" },
+    { "name": "bn254_g2_kpi", "script": "bench_bn254_g2_kpi.sh", "preset": "local" },
+    { "name": "bn254_msm_kpi", "script": "bench_bn254_msm_kpi.sh", "preset": "local" },
+    { "name": "bn254_mul_kpi", "script": "bench_bn254_mul_kpi.sh", "preset": "local" },
+    { "name": "bn254_trace_kpi", "script": "bench_bn254_trace_kpi.sh", "preset": "local" },
+    { "name": "basefold_arity_sweep", "script": "bench_basefold_arity_sweep.sh", "preset": "local" },
+    { "name": "basefold_mem_sweetspot", "script": "bench_basefold_mem_sweetspot.sh", "preset": "local" },
+    { "name": "basefold_trace_profile", "script": "bench_basefold_trace_profile.sh", "preset": "local" },
+    { "name": "glyph_adapter_kpi", "script": "bench_glyph_adapter_kpi.sh", "preset": "local" },
+    { "name": "glyph_adapter_zk_kpi", "script": "bench_glyph_adapter_zk_kpi.sh", "preset": "local" },
+    { "name": "glyph_cuda_kpi", "script": "bench_glyph_cuda_kpi.sh", "preset": "cuda" },
+    { "name": "glyph_zk_kpi", "script": "bench_glyph_zk_kpi.sh", "preset": "local" },
+    { "name": "ivc_fold_kpi", "script": "bench_ivc_fold_kpi.sh", "preset": "local" },
+    { "name": "ivc_parallel_profile", "script": "bench_ivc_parallel_profile.sh", "preset": "local" },
+    { "name": "packed_gkr_layout_sweep", "script": "bench_packed_gkr_layout_sweep.sh", "preset": "local" },
+    { "name": "state_diff_merkle", "script": "bench_state_diff_merkle.sh", "preset": "local" },
+    { "name": "state_diff_compile_prove", "script": "bench_state_diff_compile_prove.sh", "preset": "local" },
+    { "name": "state_diff_prover_profile", "script": "bench_state_diff_prover_profile.sh", "preset": "local" },
+    { "name": "state_transition_vm", "script": "bench_state_transition_vm.sh", "preset": "local" },
+    { "name": "stark_do_work_kpis", "script": "bench_stark_do_work_kpis.sh", "preset": "local" },
+
+    { "name": "glyph_evm_local", "script": "bench_glyph_evm_local.sh", "preset": "local", "requires_rpc": true },
+    { "name": "glyph_evm_round_sweep", "script": "bench_glyph_evm_round_sweep.sh", "preset": "local", "requires_rpc": true },
+    { "name": "glyph_evm_artifact", "script": "bench_glyph_evm_artifact.sh", "preset": "local", "requires_rpc": true },
+    { "name": "glyph_evm_realproof", "script": "bench_glyph_evm_realproof.sh", "preset": "local", "requires_rpc": true },
+
+    { "name": "glyph_evm_sepolia", "script": "bench_glyph_evm_sepolia.sh", "preset": "sepolia", "requires_rpc": true },
+    { "name": "glyph_sepolia_artifact", "script": "bench_glyph_sepolia_artifact.sh", "preset": "sepolia", "requires_rpc": true },
+    { "name": "glyph_sepolia_stmt", "script": "bench_glyph_sepolia_stmt.sh", "preset": "sepolia", "requires_rpc": true },
+    { "name": "groth16_sepolia", "script": "bench_groth16_sepolia.sh", "preset": "sepolia", "requires_rpc": true },
+
+    { "name": "glyph_adapter_hoodi", "script": "bench_glyph_adapter_hoodi.sh", "preset": "hoodi", "requires_rpc": true },
+    { "name": "glyph_hoodi_artifact_truncated", "script": "bench_glyph_hoodi_artifact_truncated.sh", "preset": "hoodi", "requires_rpc": true },
+    { "name": "groth16_hoodi", "script": "bench_groth16_hoodi.sh", "preset": "hoodi", "requires_rpc": true }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "network": "hoodi",
+  "contract": "0x5AFfa0BE366960a3412986C03849B7920B8368d4",
+  "deploy_tx": "0x4755b78ccab8ba8e1eca62d0e98ebeb9a5d5eee69d10d8e66d64408824b7062f",
+  "deploy_gas": "413231",
+  "timestamp": "2026-02-02T10:43:02Z"
+}

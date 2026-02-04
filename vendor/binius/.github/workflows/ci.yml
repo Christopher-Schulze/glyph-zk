@@ -1,0 +1,170 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lint:
+    name: ${{ matrix.expand.name }}
+    runs-on: ${{ matrix.expand.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        expand:
+          - runner: "ubuntu-latest"
+            name: "clippy"
+            cmd: 'RUSTFLAGS="-C target-cpu=native" cargo clippy --all --all-features --tests --benches --examples -- -D warnings'
+          - runner: "ubuntu-latest"
+            name: "pre-commit"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: rustfmt, clippy
+      - name: Run Command
+        if: ${{ matrix.expand.name != 'pre-commit' }}
+        run: ${{ matrix.expand.cmd }}
+      - name: Pre-commit
+        uses: pre-commit/action@v3.0.1
+        if: ${{ matrix.expand.name == 'pre-commit' }}
+        with:
+          extra_args: --all-files
+  build:
+    name: build-${{ matrix.expand.name }}
+    needs: [lint]
+    runs-on: ${{ matrix.expand.runner }}
+    env:
+      RUST_VERSION: 1.85.0
+    strategy:
+      matrix:
+        expand:
+          - runner: "r7a-2xlarge"
+            name: "debug-wasm"
+            cmd: rustup target add wasm32-unknown-unknown && RUSTFLAGS='--cfg getrandom_backend="wasm_js"' cargo build --package binius_field --target wasm32-unknown-unknown
+          - runner: "r7a-2xlarge"
+            name: "debug-amd"
+            cmd: "cargo build --tests --benches --examples"
+          - runner: "r7a-2xlarge"
+            name: "debug-amd-no-default-features"
+            cmd: "cargo build --tests --benches --examples --no-default-features"
+          - runner: "r7a-2xlarge"
+            name: "debug-amd-stable"
+            cmd: "cargo +$RUST_VERSION build --tests --benches --examples --no-default-features --features rayon"
+          - runner: "r8g-2xlarge"
+            name: "debug-arm"
+            cmd: "cargo build --tests --benches --examples"
+          - runner: "r7a-2xlarge"
+            name: "docs"
+            cmd: 'cargo doc --no-deps; echo "<html><head><meta http-equiv=\"refresh\" content=\"0; url=/binius_core/\"></head><body></body></html>" > target/doc/index.html'
+          - runner: "r7a-2xlarge"
+            name: "cpu_extensions-check"
+            cmd: 'scripts/check_cpu_extensions_sets.sh'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install deps
+        run: sudo yum -y install gcc openssl-devel curl jq
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: AMD job configuration template with stable Rust
+        if: ${{ matrix.expand.name == 'debug-amd-stable' }}
+        run: |
+          rustup set auto-self-update disable
+          rustup toolchain install $RUST_VERSION
+      - name: Run Command
+        run: ${{ matrix.expand.cmd }}
+      - name: Upload static files as artifact
+        if: ${{ matrix.expand.name == 'docs' }}
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "target/doc"
+  test:
+    name: unit-test-${{ matrix.expand.name }}
+    needs: [build]
+    runs-on: ${{ matrix.expand.runner }}
+    env:
+      RUST_VERSION: 1.85.0
+    strategy:
+      matrix:
+        expand:
+          - runner: "r7a-2xlarge"
+            name: "amd"
+            cmd: 'RUSTFLAGS="-C target-cpu=native" ./scripts/run_tests_and_examples.sh'
+          - runner: "r7a-2xlarge"
+            name: "amd-portable"
+            cmd: 'RUSTFLAGS="-C target-cpu=generic" ./scripts/run_tests_and_examples.sh'
+          - runner: "r7a-2xlarge"
+            name: "amd-stable"
+            cmd: 'RUSTFLAGS="-C target-cpu=native" CARGO_STABLE=true ./scripts/run_tests_and_examples.sh'
+          - runner: "r7a-2xlarge"
+            name: "single-threaded"
+            cmd: 'RAYON_NUM_THREADS=1 RUSTFLAGS="-C target-cpu=native" ./scripts/run_tests_and_examples.sh'
+          - runner: "r7a-2xlarge"
+            name: "no-default-features"
+            cmd: 'CARGO_EXTRA_FLAGS="--no-default-features" RUSTFLAGS="-C target-cpu=native" ./scripts/run_tests_and_examples.sh'
+          - runner: "r8g-2xlarge"
+            name: "arm"
+            cmd: 'RUSTFLAGS="-C target-cpu=native -C target-feature=+aes" ./scripts/run_tests_and_examples.sh'
+          - runner: "r8g-2xlarge"
+            name: "arm-portable"
+            cmd: 'RUSTFLAGS="-C target-cpu=generic" ./scripts/run_tests_and_examples.sh'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install deps
+        run: sudo yum -y install gcc openssl-devel
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: AMD job configuration template with stable Rust
+        if: ${{ matrix.expand.name == 'amd-stable' }}
+        run: |
+          rustup set auto-self-update disable
+          rustup toolchain install $RUST_VERSION
+      - name: Run Command
+        run: ${{ matrix.expand.cmd }}
+  integration-test:
+    name: integration-test-${{ matrix.expand.name }}
+    needs: [build]
+    runs-on: ${{ matrix.expand.runner }}
+    env:
+      RUST_VERSION: 1.85.0
+    strategy:
+      matrix:
+        expand:
+          - runner: "r7a-2xlarge"
+            name: "binius-m3-amd"
+            cmd: 'RUSTFLAGS="-C target-cpu=native" BINIUS_M3_TEST_PROVE_VERIFY=1 cargo test --package binius_m3'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install deps
+        run: sudo yum -y install gcc openssl-devel
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Run Command
+        run: ${{ matrix.expand.cmd }}
+  deploy:
+    name: deploy-pages
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

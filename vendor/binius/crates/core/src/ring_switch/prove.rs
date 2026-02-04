@@ -1,0 +1,459 @@
+// Copyright 2024-2025 Irreducible Inc.
+
+use std::{cell::Cell, iter, sync::Arc};
+
+use binius_compute::{
+	ComputeLayer, ComputeLayerExecutor, ComputeMemory, FSlice, alloc::ComputeAllocator,
+	cpu::CpuMemory, layer,
+};
+use binius_field::{Field, PackedField, PackedFieldIndexable};
+use binius_math::{
+	B1, B8, B16, B32, B64, B128, MultilinearPoly, MultilinearQuery, PackedTop, TowerTop,
+};
+use binius_maybe_rayon::prelude::*;
+use binius_utils::checked_arithmetics::log2_ceil_usize;
+use itertools::izip;
+use tracing::instrument;
+
+use super::{
+	common::{EvalClaimPrefixDesc, EvalClaimSystem, PIOPSumcheckClaimDesc},
+	eq_ind::RowBatchCoeffs,
+	error::Error,
+	logging::MLEFoldHisgDimensionsData,
+	tower_tensor_algebra::TowerTensorAlgebra,
+};
+use crate::{
+	fiat_shamir::{CanSample, Challenger},
+	piop::PIOPSumcheckClaim,
+	protocols::evalcheck::subclaims::MemoizedData,
+	ring_switch::{
+		common::EvalClaimSuffixDesc,
+		eq_ind::{RingSwitchEqInd, RingSwitchEqIndPrecompute},
+		logging::CalculateRingSwitchEqIndData,
+	},
+	transcript::ProverTranscript,
+};
+
+thread_local! {
+	static RING_SWITCH_TENSOR_CAP: Cell<usize> = Cell::new(0);
+}
+
+fn ring_switch_tensor_capacity() -> usize {
+	RING_SWITCH_TENSOR_CAP.with(|cell| cell.get())
+}
+
+fn ring_switch_update_tensor_capacity(capacity: usize) {
+	RING_SWITCH_TENSOR_CAP.with(|cell| cell.set(capacity));
+}
+
+pub struct ReducedWitness<'a, F: Field, Hal: ComputeLayer<F>> {
+	pub transparents: Vec<FSlice<'a, F, Hal>>,
+	pub sumcheck_claims: Vec<PIOPSumcheckClaim<F>>,
+}
+
+pub fn prove<'a, F, P, M, Challenger_, Hal, HostAllocatorType, DeviceAllocatorType>(
+	system: &EvalClaimSystem<F>,
+	witnesses: &[M],
+	transcript: &mut ProverTranscript<Challenger_>,
+	memoized_data: MemoizedData<P>,
+	hal: &Hal,
+	dev_alloc: &'a DeviceAllocatorType,
+	host_alloc: &HostAllocatorType,
+) -> Result<ReducedWitness<'a, F, Hal>, Error>
+where
+	F: TowerTop + PackedTop<Scalar = F>,
+	P: PackedFieldIndexable<Scalar = F> + PackedTop,
+	M: MultilinearPoly<P> + Sync,
+	Challenger_: Challenger,
+	Hal: ComputeLayer<F>,
+	HostAllocatorType: ComputeAllocator<F, CpuMemory>,
+	DeviceAllocatorType: ComputeAllocator<F, Hal::DevMem>,
+{
+	if witnesses.len() != system.commit_meta.total_multilins() {
+		return Err(Error::InvalidWitness(
+			"witness length does not match the number of multilinears".into(),
+		));
+	}
+
+	// Sample enough randomness to batch tensor elements corresponding to claims that share an
+	// evaluation point prefix.
+	let n_mixing_challenges = log2_ceil_usize(system.sumcheck_claim_descs.len());
+	let mixing_challenges = transcript.sample_vec(n_mixing_challenges);
+	let dimensions_data = MLEFoldHisgDimensionsData::new(witnesses);
+	let mle_fold_high_span = tracing::debug_span!(
+		"[task] (Ring Switch) MLE Fold High",
+		phase = "ring_switch",
+		perfetto_category = "task.main",
+		?dimensions_data,
+	)
+	.entered();
+
+	let mixing_coeffs = MultilinearQuery::expand(&mixing_challenges).into_expansion();
+
+	// For each evaluation point prefix, send one batched partial evaluation.
+	let tensor_elems = compute_partial_evals(system, witnesses, memoized_data)?;
+	let scaled_tensor_elems = scale_tensor_elems(tensor_elems, &mixing_coeffs);
+	let mixed_tensor_elems = mix_tensor_elems_for_prefixes(
+		&scaled_tensor_elems,
+		&system.prefix_descs,
+		&system.eval_claim_to_prefix_desc_index,
+	)?;
+	drop(mle_fold_high_span);
+	let mut writer = transcript.message();
+	for (mixed_tensor_elem, prefix_desc) in iter::zip(mixed_tensor_elems, &system.prefix_descs) {
+		debug_assert_eq!(mixed_tensor_elem.vertical_elems().len(), 1 << prefix_desc.kappa());
+		writer.write_scalar_slice(mixed_tensor_elem.vertical_elems());
+	}
+
+	// Sample the row-batching randomness.
+	let row_batch_challenges = transcript.sample_vec(system.max_claim_kappa());
+	let row_batch_coeffs = Arc::new(RowBatchCoeffs::new(
+		MultilinearQuery::<F, _>::expand(&row_batch_challenges).into_expansion(),
+	));
+
+	let row_batched_evals = compute_row_batched_sumcheck_evals(
+		scaled_tensor_elems,
+		row_batch_coeffs.coeffs(),
+	);
+	transcript.message().write_scalar_slice(&row_batched_evals);
+
+	// Create the reduced PIOP sumcheck witnesses.
+	let dimensions_data = CalculateRingSwitchEqIndData::new(system.suffix_descs.iter());
+	let calculate_ring_switch_eq_ind_span = tracing::debug_span!(
+		"[task] Calculate Ring Switch Eq Ind",
+		phase = "ring_switch",
+		perfetto_category = "task.main",
+		?dimensions_data,
+	)
+	.entered();
+
+	let ring_switch_eq_inds = make_ring_switch_eq_inds(
+		&system.sumcheck_claim_descs,
+		&system.suffix_descs,
+		row_batch_coeffs,
+		&mixing_coeffs,
+		hal,
+		dev_alloc,
+		host_alloc,
+	)?;
+	drop(calculate_ring_switch_eq_ind_span);
+
+	let mut sumcheck_claims = Vec::with_capacity(system.sumcheck_claim_descs.len());
+	sumcheck_claims.extend(iter::zip(&system.sumcheck_claim_descs, row_batched_evals)
+		.enumerate()
+		.map(|(idx, (claim_desc, eval))| {
+			let suffix_desc = &system.suffix_descs[claim_desc.suffix_desc_idx];
+			PIOPSumcheckClaim {
+				n_vars: suffix_desc.suffix.len(),
+				committed: claim_desc.committed_idx,
+				transparent: idx,
+				sum: eval,
+			}
+		}));
+
+	Ok(ReducedWitness {
+		transparents: ring_switch_eq_inds,
+		sumcheck_claims,
+	})
+}
+
+#[instrument(skip_all)]
+fn compute_partial_evals<F, P, M>(
+	system: &EvalClaimSystem<F>,
+	witnesses: &[M],
+	mut memoized_data: MemoizedData<P>,
+) -> Result<Vec<TowerTensorAlgebra<F>>, Error>
+where
+	F: TowerTop,
+	P: PackedField<Scalar = F>,
+	M: MultilinearPoly<P> + Sync,
+{
+	memoized_data.memoize_query_par(
+		system
+			.suffix_descs
+			.iter()
+			.map(|desc| Arc::as_ref(&desc.suffix)),
+	)?;
+
+	let needed = system.sumcheck_claim_descs.len();
+	let cached = ring_switch_tensor_capacity();
+	let cap_limit = needed.saturating_mul(2).max(1024);
+	let mut tensor_elems: Vec<Result<TowerTensorAlgebra<F>, Error>> =
+		Vec::with_capacity(cached.min(cap_limit).max(needed));
+	system
+		.sumcheck_claim_descs
+		.par_iter()
+		.map(
+			|PIOPSumcheckClaimDesc {
+			     committed_idx,
+			     suffix_desc_idx,
+			     eval_claim,
+			 }| {
+				let suffix_desc = &system.suffix_descs[*suffix_desc_idx];
+
+				let target_len = 1 << suffix_desc.kappa;
+				let mut elems = Vec::with_capacity(target_len);
+				unsafe {
+					elems.set_len(target_len);
+				}
+				if let Some(partial_eval) =
+					memoized_data.partial_eval(eval_claim.id, Arc::as_ref(&suffix_desc.suffix))
+				{
+					let base_len = target_len.min(1 << partial_eval.n_vars());
+					for (dst, src) in elems[..base_len]
+						.iter_mut()
+						.zip(
+							PackedField::iter_slice(
+								partial_eval.packed_evals().expect("packed_evals exist"),
+							)
+							.take(base_len),
+						)
+					{
+						*dst = src;
+					}
+					for i in base_len..target_len {
+						let idx = i % base_len;
+						elems[i] = elems[idx];
+					}
+				} else {
+					let suffix_query = memoized_data
+						.full_query_readonly(&suffix_desc.suffix)
+						.expect("memoized above");
+					let partial_eval =
+						witnesses[*committed_idx].evaluate_partial_high(suffix_query.into())?;
+					let base_len = target_len.min(1 << partial_eval.n_vars());
+					for (dst, src) in elems[..base_len]
+						.iter_mut()
+						.zip(PackedField::iter_slice(partial_eval.evals()).take(base_len))
+					{
+						*dst = src;
+					}
+					for i in base_len..target_len {
+						let idx = i % base_len;
+						elems[i] = elems[idx];
+					}
+				};
+				TowerTensorAlgebra::new(suffix_desc.kappa, elems)
+			},
+		)
+		.collect_into_vec(&mut tensor_elems);
+	let tensor_elems = tensor_elems.into_iter().collect::<Result<Vec<_>, _>>()?;
+	ring_switch_update_tensor_capacity(tensor_elems.capacity().min(cap_limit));
+
+	Ok(tensor_elems)
+}
+
+fn scale_tensor_elems<F>(
+	tensor_elems: Vec<TowerTensorAlgebra<F>>,
+	mixing_coeffs: &[F],
+) -> Vec<TowerTensorAlgebra<F>>
+where
+	F: TowerTop,
+{
+	// Precondition
+	assert!(tensor_elems.len() <= mixing_coeffs.len());
+
+	tensor_elems
+		.into_par_iter()
+		.zip(mixing_coeffs)
+		.map(|(tensor_elem, &mixing_coeff)| tensor_elem.scale_vertical(mixing_coeff))
+		.collect()
+}
+
+fn mix_tensor_elems_for_prefixes<F>(
+	scaled_tensor_elems: &[TowerTensorAlgebra<F>],
+	prefix_descs: &[EvalClaimPrefixDesc<F>],
+	eval_claim_to_prefix_desc_index: &[usize],
+) -> Result<Vec<TowerTensorAlgebra<F>>, Error>
+where
+	F: TowerTop,
+{
+	// Precondition
+	assert_eq!(scaled_tensor_elems.len(), eval_claim_to_prefix_desc_index.len());
+
+	let mut batched_tensor_elems = Vec::with_capacity(prefix_descs.len());
+	for desc in prefix_descs {
+		batched_tensor_elems.push(TowerTensorAlgebra::zero(desc.kappa())?);
+	}
+	for (tensor_elem, &desc_index) in
+		iter::zip(scaled_tensor_elems, eval_claim_to_prefix_desc_index)
+	{
+		let mixed_val = &mut batched_tensor_elems[desc_index];
+		debug_assert_eq!(mixed_val.kappa(), tensor_elem.kappa());
+		mixed_val.add_assign(tensor_elem)?;
+	}
+	Ok(batched_tensor_elems)
+}
+
+#[instrument(skip_all)]
+fn compute_row_batched_sumcheck_evals<F>(
+	tensor_elems: Vec<TowerTensorAlgebra<F>>,
+	row_batch_coeffs: &[F],
+) -> Vec<F>
+where
+	F: TowerTop + PackedTop,
+{
+	tensor_elems
+		.into_par_iter()
+		.map(|tensor_elem| tensor_elem.fold_vertical(row_batch_coeffs))
+		.collect()
+}
+
+fn make_ring_switch_eq_inds<'a, F, Hal, HostAllocatorType, DeviceAllocatorType>(
+	sumcheck_claim_descs: &[PIOPSumcheckClaimDesc<F>],
+	suffix_descs: &[EvalClaimSuffixDesc<F>],
+	row_batch_coeffs: Arc<RowBatchCoeffs<F>>,
+	mixing_coeffs: &[F],
+	hal: &Hal,
+	dev_alloc: &'a DeviceAllocatorType,
+	host_alloc: &HostAllocatorType,
+) -> Result<Vec<FSlice<'a, F, Hal>>, Error>
+where
+	F: TowerTop,
+	Hal: ComputeLayer<F>,
+	HostAllocatorType: ComputeAllocator<F, CpuMemory>,
+	DeviceAllocatorType: ComputeAllocator<F, Hal::DevMem>,
+{
+	let mut eq_inds = Vec::with_capacity(sumcheck_claim_descs.len());
+
+	let max_kappa = suffix_descs.iter().map(|desc| desc.kappa).max().unwrap_or(0);
+	let mut row_batching_query_expansions = vec![None; max_kappa + 1];
+	for suffix_desc in suffix_descs {
+		let kappa = suffix_desc.kappa;
+		if row_batching_query_expansions[kappa].is_none() {
+			let extension_degree = 1 << kappa;
+			let mut row_batching_query_expansion = dev_alloc.alloc(extension_degree)?;
+			hal.copy_h2d(
+				&row_batch_coeffs.coeffs()[0..extension_degree],
+				&mut row_batching_query_expansion,
+			)?;
+			row_batching_query_expansions[kappa] =
+				Some(Hal::DevMem::to_const(row_batching_query_expansion));
+		}
+	}
+
+	let mut claim_buckets = vec![Vec::new(); max_kappa + 1];
+	for (claim_idx, (claim_desc, &mixing_coeff)) in
+		sumcheck_claim_descs.iter().zip(mixing_coeffs).enumerate()
+	{
+		let suffix_desc = &suffix_descs[claim_desc.suffix_desc_idx];
+		claim_buckets[suffix_desc.kappa].push((claim_idx, mixing_coeff));
+	}
+
+	let mut precompute: Vec<Option<RingSwitchEqIndPrecompute<'_, F, Hal::DevMem>>> =
+		Vec::with_capacity(sumcheck_claim_descs.len());
+	precompute.resize_with(sumcheck_claim_descs.len(), || None);
+	for (kappa, bucket) in claim_buckets.into_iter().enumerate() {
+		if bucket.is_empty() {
+			continue;
+		}
+		let row_batching_query_expansion = row_batching_query_expansions[kappa]
+			.expect("row batching expansion missing");
+		let results = bucket
+			.into_par_iter()
+			.map(|(claim_idx, mixing_coeff)| {
+				let claim_desc = &sumcheck_claim_descs[claim_idx];
+				let suffix_desc = &suffix_descs[claim_desc.suffix_desc_idx];
+				let precompute = RingSwitchEqInd::<F, F>::precompute_values_with_row_batching(
+					Arc::as_ref(&suffix_desc.suffix),
+					row_batch_coeffs.clone(),
+					mixing_coeff,
+					suffix_desc.kappa,
+					row_batching_query_expansion,
+					hal,
+					dev_alloc,
+					host_alloc,
+				)?;
+				Ok((claim_idx, precompute))
+			})
+			.collect::<Result<Vec<_>, Error>>()?;
+		for (claim_idx, precompute_entry) in results {
+			precompute[claim_idx] = Some(precompute_entry);
+		}
+	}
+	let precompute = precompute
+		.into_iter()
+		.map(|entry| entry.expect("precompute missing entry"))
+		.collect::<Vec<_>>();
+
+	let _ = hal.execute(|exec| {
+		let res = exec
+			.map(
+				izip!(sumcheck_claim_descs, mixing_coeffs, precompute),
+				|exec, (claim_desc, &mixing_coeff, precompute)| {
+					let suffix_desc = &suffix_descs[claim_desc.suffix_desc_idx];
+
+					make_ring_switch_eq_ind(
+						suffix_desc,
+						row_batch_coeffs.clone(),
+						mixing_coeff,
+						exec,
+						precompute,
+					)
+					.map_err(|e| layer::Error::CoreLibError(Box::new(e)))
+				},
+			)
+			.map_err(|e| layer::Error::CoreLibError(Box::new(e)))?;
+
+		eq_inds.extend(res);
+		Ok(vec![])
+	})?;
+
+	Ok(eq_inds)
+}
+
+fn make_ring_switch_eq_ind<'a, F, Mem, Exec>(
+	suffix_desc: &EvalClaimSuffixDesc<F>,
+	row_batch_coeffs: Arc<RowBatchCoeffs<F>>,
+	mixing_coeff: F,
+	exec: &mut Exec,
+	precompute: RingSwitchEqIndPrecompute<'a, F, Mem>,
+) -> Result<Mem::FSlice<'a>, Error>
+where
+	F: TowerTop,
+	Mem: ComputeMemory<F>,
+	Exec: ComputeLayerExecutor<F, DevMem = Mem>,
+{
+	let eq_ind = match F::TOWER_LEVEL - suffix_desc.kappa {
+		0 => RingSwitchEqInd::<B1, _>::new(
+			suffix_desc.suffix.clone(),
+			row_batch_coeffs,
+			mixing_coeff,
+		)?
+		.multilinear_extension(precompute, exec, 0),
+		3 => RingSwitchEqInd::<B8, _>::new(
+			suffix_desc.suffix.clone(),
+			row_batch_coeffs,
+			mixing_coeff,
+		)?
+		.multilinear_extension(precompute, exec, 3),
+		4 => RingSwitchEqInd::<B16, _>::new(
+			suffix_desc.suffix.clone(),
+			row_batch_coeffs,
+			mixing_coeff,
+		)?
+		.multilinear_extension(precompute, exec, 4),
+		5 => RingSwitchEqInd::<B32, _>::new(
+			suffix_desc.suffix.clone(),
+			row_batch_coeffs,
+			mixing_coeff,
+		)?
+		.multilinear_extension(precompute, exec, 5),
+		6 => RingSwitchEqInd::<B64, _>::new(
+			suffix_desc.suffix.clone(),
+			row_batch_coeffs,
+			mixing_coeff,
+		)?
+		.multilinear_extension(precompute, exec, 6),
+		7 => RingSwitchEqInd::<B128, _>::new(
+			suffix_desc.suffix.clone(),
+			row_batch_coeffs,
+			mixing_coeff,
+		)?
+		.multilinear_extension(precompute, exec, 7),
+		_ => Err(Error::PackingDegreeNotSupported {
+			kappa: suffix_desc.kappa,
+		}),
+	}?;
+	Ok(eq_ind)
+}

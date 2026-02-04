@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-02-02T10:32:50Z",
+  "git_commit": "unknown",
+  "script": "bench_glyph_hoodi_artifact_truncated.sh",
+  "json_out": "bench_glyph_hoodi_artifact_truncated_20260202T102438Z.json"
+}

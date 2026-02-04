@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-02-02T10:45:51Z",
+  "git_commit": "unknown",
+  "script": "bench_glyph_sepolia_artifact.sh",
+  "json_out": "bench_glyph_hoodi_artifact_20260202T110500Z.json"
+}

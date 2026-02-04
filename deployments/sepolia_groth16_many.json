@@ -1,0 +1,7 @@
+{
+  "network": "sepolia",
+  "contract": "0x27e62e58C37FEA8C4b78C5f780F9008B8AfE0905",
+  "deploy_tx": "0x5614b0b8640c86502cb63ab2dd15bf56532d7866003a3c85fff75384e1e160f0",
+  "deploy_gas": "705134",
+  "timestamp": "2026-02-02T10:25:39Z"
+}

@@ -1,0 +1,12 @@
+{
+  "network": "hoodi",
+  "chain_id": "560048",
+  "rpc_host": "https://ethereum-hoodi-rpc.publicnode.com",
+  "deployer": "0xc41E9Db7bbAEBF392A8d1cd05E0D49D90067D0f2",
+  "contract": "0xfAd89a58ED6c96135B5AF65ab0E1F42833f097a7",
+  "deploy_tx": "0x9f60e5938d0ab190577da53a053d02279357462757d8f5267a69dc7cbb563170",
+  "deploy_gas": "209672",
+  "code_bytes": 725,
+  "verify_result": "skipped",
+  "timestamp": "2026-02-02T10:21:15Z"
+}

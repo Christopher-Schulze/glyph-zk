@@ -1,0 +1,18 @@
+{
+  "bench": "bench_groth16_sepolia",
+  "case": {
+    "base_tx_gas": 21000,
+    "calldata_bytes": 548,
+    "calldata_gas": 5396,
+    "estimate_gas": "0x421ed",
+    "execution_gas": 244433,
+    "name": "groth16_verify",
+    "tx_gas": "267538",
+    "tx_hash": "0xd4fc09446518240a4d3c833d58550084ff8658bb07e768f074f2e1ba8aca81e2"
+  },
+  "chain_id": "11155111",
+  "contract": "0x27e62e58C37FEA8C4b78C5f780F9008B8AfE0905",
+  "git_commit": "unknown",
+  "rpc_host": "https://ethereum-sepolia-rpc.publicnode.com",
+  "timestamp": "2026-02-02T10:25:49Z"
+}

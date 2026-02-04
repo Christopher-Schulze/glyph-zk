@@ -1,0 +1,28 @@
+=== bench_context ===
+bench_name=groth16_sepolia
+out_file=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_sepolia_20260202T104021Z.json
+out_dir=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks
+run_id=20260202T104021Z
+rpc_host=https://ethereum-sepolia-rpc.publicnode.com
+chain_id=11155111
+deployer=0xc41E9Db7bbAEBF392A8d1cd05E0D49D90067D0f2
+out_json=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_sepolia_20260202T104021Z.json
+out_log=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_sepolia_20260202T104021Z.log
+
+Checking balance...
+balance_wei=44490808947247227
+
+Deploying Groth16Verifier...
+contract=0xced126807f37044d6A2E07036610947F368116Ce
+deploy_tx=0x76376edd04894a54f954fdca861d86e914a9f43fa222734c739ad6a2b030fcd0
+deploy_gas=413231
+
+case                    bytes estimate_gas
+-------------------- -------- ------------
+groth16_verify            356      0x382d2
+
+Sending on-chain transaction...
+tx_hash=0x522222efb008569c6a43f612ce3c1ce365138507d6ea7ab4a9b542f19b2de31f
+tx_gas=227128
+json_out=/Users/christopher/CODE/glyph-zk/scripts/out/benchmarks/bench_groth16_sepolia_20260202T104021Z.json
+Done.

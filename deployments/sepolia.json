@@ -1,0 +1,12 @@
+{
+  "network": "sepolia",
+  "chain_id": "11155111",
+  "rpc_host": "https://ethereum-sepolia-rpc.publicnode.com",
+  "deployer": "0xc41E9Db7bbAEBF392A8d1cd05E0D49D90067D0f2",
+  "contract": "0x25137B56046974F1Dda9D2Da9e868A8f5E23E5E7",
+  "deploy_tx": "0x9fd11a241b962bb7a8f610ac5a979e770dff4d0fdc48cfed69def6f0f35c0815",
+  "deploy_gas": "209672",
+  "code_bytes": 725,
+  "verify_result": "skipped",
+  "timestamp": "2026-02-02T10:20:50Z"
+}
